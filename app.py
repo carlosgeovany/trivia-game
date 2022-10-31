@@ -4,7 +4,8 @@ import pandas as pd
 pn.extension()
 
 def get_data(num_questions, difficulty, category):
-    url = f"https://opentdb.com/api.php?amount={num_questions}&category={category_match[category]}&difficulty={difficulty}&type=boolean"
+    #url = f"https://opentdb.com/api.php?amount={num_questions}&category={category_match[category]}&difficulty={difficulty}&type=boolean"
+    url = f"https://opentdb.com/api.php?amount={num_questions}&category={category_match[category]}&difficulty={difficulty}"
     df = pd.DataFrame(
         requests.get(url).json()['results']
     )
@@ -71,34 +72,35 @@ num_questions
 
 def question_list(i, df):
 
-    button_true = pn.widgets.Button(name='True')
-    button_false = pn.widgets.Button(name='False')
- 
-    text = pn.widgets.StaticText(value='')
+	
+	    button_true = pn.widgets.Button(name='True')
+	    button_false = pn.widgets.Button(name='False')
+	 
+	    text = pn.widgets.StaticText(value='')
 
-    def processing_button_true(event):
-        if df.correct_answer[i] == 'True': 
-            text.value = 'Correct!'
-        else:
-            text.value = 'Incorrect!'
+	    def processing_button_true(event):
+	        if df.correct_answer[i] == 'True': 
+	            text.value = 'Correct!'
+	        else:
+	            text.value = 'Incorrect!'
 
-    def processing_button_false(event):
-        if df.correct_answer[i] == 'False': 
-            text.value = 'Correct!'
-        else:
-            text.value = 'Incorrect!'
+	    def processing_button_false(event):
+	        if df.correct_answer[i] == 'False': 
+	            text.value = 'Correct!'
+	        else:
+	            text.value = 'Incorrect!'
 
-    button_true.on_click(processing_button_true)
-    button_false.on_click(processing_button_false)
-    return pn.Column(
-        pn.pane.Markdown(f"""
-         
-        #Question {i+1}:
-        ### {df.question[i]}
-        """),
+	    button_true.on_click(processing_button_true)
+	    button_false.on_click(processing_button_false)
+	    return pn.Column(
+	        pn.pane.Markdown(f"""
+	         
+	        #Question {i+1}:
+	        ### {df.question[i]}
+	        """),
 
-        pn.Row(button_true,button_false), 
-        text)
+	        pn.Row(button_true,button_false), 
+	        text)
 
 
 def get_data_and_questions(num_questions, difficulty, category):
